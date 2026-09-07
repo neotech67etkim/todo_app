@@ -43,13 +43,37 @@ npx expo start
 터미널에 뜨는 QR코드를 스마트폰의 **Expo Go** 앱(App Store/Play 스토어에서 설치)으로
 스캔하면 안드로이드/iOS 실기기에서 바로 실행됩니다.
 
-### 3. 실제 스토어 배포가 필요할 때
+### 3. 안드로이드에서 알림까지 테스트하려면: 개발 빌드(Development Build)
 
-프로토타입 검증 후 실제 앱스토어/플레이스토어에 낼 때는 EAS Build를 사용합니다.
+Expo Go(SDK 53 이후)는 안드로이드에서 `expo-notifications` 기능을 지원하지
+않습니다(구글 정책 변경으로 Expo 팀이 제거). 매일 알림 기능까지 실기기에서
+확인하려면 Expo Go 대신 이 프로젝트 전용 "개발 빌드" APK를 한 번 만들어서
+설치해야 합니다. (할일/리스트/뱃지 등 나머지 기능은 Expo Go로도 계속 확인 가능)
 
 ```bash
 npm install -g eas-cli
-eas login
+eas login                                   # https://expo.dev 계정으로 로그인 (무료 가입 가능)
+eas build:configure                         # 최초 1회, 프로젝트를 Expo 계정에 연결
+eas build --profile development --platform android
+```
+
+빌드가 끝나면(클라우드에서 10~20분 정도 걸림) 터미널에 다운로드 링크/QR코드가
+나옵니다. 그 QR을 폰 카메라로 스캔해서 APK를 내려받아 설치하세요(출처를 알 수
+없는 앱 설치 허용 필요). 설치한 앱 아이콘으로 실행한 뒤, 컴퓨터에서는:
+
+```bash
+npm run start:dev-client
+```
+
+을 실행하고 뜨는 QR을 그 개발 빌드 앱으로 스캔하면 연결됩니다. 이 앱은 알림
+기능이 정상 동작합니다.
+
+### 4. 실제 스토어 배포가 필요할 때
+
+프로토타입 검증 후 실제 앱스토어/플레이스토어에 낼 때는 같은 EAS Build를
+`production` 프로필로 사용합니다.
+
+```bash
 eas build --platform android
 eas build --platform ios
 ```
@@ -60,6 +84,8 @@ eas build --platform ios
 ## 알림/뱃지 참고사항
 
 - 알림 권한은 설정 화면에서 알림을 켤 때 요청합니다.
+- **안드로이드 + Expo Go 조합에서는 알림이 지원되지 않습니다** — 위 3번 항목의
+  개발 빌드를 사용하세요. (iOS는 Expo Go에서도 로컬 알림이 동작합니다.)
 - iOS 시뮬레이터에서는 푸시/로컬 알림이 정상 동작하지 않을 수 있어 실기기 테스트를
   권장합니다.
 - 이 저장소를 만든 세션에는 모바일 기기/에뮬레이터가 없어 실제 앱 실행 화면은
