@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "할일 공유 앱",
+    "slug": "todo-sharing-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.todosharingapp",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
+    },
+    "android": {
+      "package": "com.example.todosharingapp",
+      "permissions": ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"]
+    },
+    "plugins": ["expo-notifications"]
+  }
+}
