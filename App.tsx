@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { UserProvider } from './src/context/UserContext';
 import { useTodos } from './src/hooks/useTodos';
 import RootNavigator from './src/navigation/RootNavigator';
@@ -16,10 +17,12 @@ function BadgeSync() {
 
 export default function App() {
   return (
-    <UserProvider>
-      <BadgeSync />
-      <RootNavigator />
-      <StatusBar style="auto" />
-    </UserProvider>
+    <SafeAreaProvider>
+      <UserProvider>
+        <BadgeSync />
+        <RootNavigator />
+        <StatusBar style="auto" />
+      </UserProvider>
+    </SafeAreaProvider>
   );
 }
