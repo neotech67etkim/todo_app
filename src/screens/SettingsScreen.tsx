@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import Constants from 'expo-constants';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useUser } from '../context/UserContext';
 import { cancelDailyReminder, requestNotificationPermission, scheduleDailyReminder } from '../services/notifications';
 
 const NOTIF_ENABLED_KEY = '@todo_sharing_app/notif_enabled';
 const NOTIF_TIME_KEY = '@todo_sharing_app/notif_time';
+const isUnsupportedExpoGoAndroid = Constants.appOwnership === 'expo' && Platform.OS === 'android';
 
 export default function SettingsScreen() {
   const { username, setUsername } = useUser();
@@ -43,6 +45,14 @@ export default function SettingsScreen() {
 
   const applyNotificationSetting = async (nextEnabled: boolean, nextTime: Date) => {
     if (nextEnabled) {
+      if (isUnsupportedExpoGoAndroid) {
+        Alert.alert(
+          '알림을 사용할 수 없습니다',
+          'Expo Go(안드로이드)에서는 정책상 알림 기능이 지원되지 않습니다.\n실제 알림을 테스트하려면 개발 빌드(EAS Build)로 만든 앱을 사용해주세요.'
+        );
+        setEnabled(false);
+        return;
+      }
       const granted = await requestNotificationPermission();
       if (!granted) {
         setEnabled(false);
