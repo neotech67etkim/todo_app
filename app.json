@@ -16,7 +16,6 @@
     "android": {
       "package": "com.example.todosharingapp",
       "permissions": ["NOTIFICATIONS", "SCHEDULE_EXACT_ALARM"]
-    },
-    "plugins": ["expo-notifications"]
+    }
   }
 }
